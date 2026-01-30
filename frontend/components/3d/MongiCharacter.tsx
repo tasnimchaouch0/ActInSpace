@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useLayoutEffect } from 'react';
 import { useGLTF, useAnimations, Center } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -14,7 +14,39 @@ export default function MongiCharacter({
     const { scene, animations } = useGLTF('/model.glb');
     const { actions } = useAnimations(animations, groupRef);
 
-    // Keep the animations as requested
+    useLayoutEffect(() => {
+        scene.traverse((obj) => {
+            if ((obj as THREE.Mesh).isMesh) {
+                const mesh = obj as THREE.Mesh;
+                if (mesh.material) {
+                    mesh.castShadow = true;
+                    mesh.receiveShadow = true;
+                    // Ensure materials are updated and reactive to light
+                    if (Array.isArray(mesh.material)) {
+                        mesh.material.forEach(mat => {
+                            mat.needsUpdate = true;
+                        });
+                    } else {
+                        mesh.material.needsUpdate = true;
+                    }
+                }
+            }
+        });
+    }, [scene]);
+
+    // Cached meshes for performance
+    const morphMeshes = useRef<THREE.Mesh[]>([]);
+
+    useLayoutEffect(() => {
+        const meshes: THREE.Mesh[] = [];
+        scene.traverse((obj) => {
+            if ((obj as THREE.Mesh).isMesh && (obj as THREE.Mesh).morphTargetInfluences) {
+                meshes.push(obj as THREE.Mesh);
+            }
+        });
+        morphMeshes.current = meshes;
+    }, [scene]);
+
     useFrame((state) => {
         if (groupRef.current) {
             // Gentle floating
@@ -28,6 +60,40 @@ export default function MongiCharacter({
 
             if (isSpeaking) {
                 groupRef.current.position.y += Math.sin(state.clock.elapsedTime * 8) * 0.03;
+
+                // Open mouth on cached meshes
+                morphMeshes.current.forEach((mesh) => {
+                    if (mesh.morphTargetDictionary && mesh.morphTargetInfluences) {
+                        const mouthIndices = [
+                            mesh.morphTargetDictionary['mouthOpen'],
+                            mesh.morphTargetDictionary['Mouth_Open'],
+                            mesh.morphTargetDictionary['MouthOpen'],
+                            mesh.morphTargetDictionary['jawOpen'],
+                            mesh.morphTargetDictionary['Jaw_Open']
+                        ].filter(index => index !== undefined);
+
+                        mouthIndices.forEach(index => {
+                            mesh.morphTargetInfluences![index] = THREE.MathUtils.lerp(
+                                mesh.morphTargetInfluences![index],
+                                0.5 + Math.sin(state.clock.elapsedTime * 15) * 0.5,
+                                0.2
+                            );
+                        });
+                    }
+                });
+            } else {
+                // Smoothly reset mouth on cached meshes
+                morphMeshes.current.forEach((mesh) => {
+                    if (mesh.morphTargetInfluences) {
+                        Object.values(mesh.morphTargetDictionary || {}).forEach(index => {
+                            mesh.morphTargetInfluences![index] = THREE.MathUtils.lerp(
+                                mesh.morphTargetInfluences![index],
+                                0,
+                                0.1
+                            );
+                        });
+                    }
+                });
             }
         }
     });
@@ -41,4 +107,4 @@ export default function MongiCharacter({
     );
 }
 
-useGLTF.preload('/model.glb');
+// useGLTF.preload('/model.glb');
