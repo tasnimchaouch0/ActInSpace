@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+
+# Node/Next.js
+node_modules/
+.next/
+dist/
+
+# Logs
+*.log
+
+# VSCode
+.vscode/
+
+# Project Specific
+data/
+out/
+*.egg-info/
+research/
+data/sentnel_data
+data/The-Gale-Encyclopedia-of-Medicine-3rd-Edition-staibabussalamsula.ac_.id_.pdf

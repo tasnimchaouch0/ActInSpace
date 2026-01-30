@@ -1,0 +1,78 @@
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/preflight" layer(base);
+@import "tailwindcss/utilities" layer(utilities);
+
+@layer theme {
+  :root {
+    --color-background: 250 250 250;
+    --color-foreground: 10 10 10;
+    --color-card: 255 255 255;
+    --color-card-foreground: 10 10 10;
+    --color-popover: 255 255 255;
+    --color-popover-foreground: 10 10 10;
+    --color-primary: 99 102 241;
+    --color-primary-foreground: 250 250 250;
+    --color-secondary: 100 181 246;
+    --color-secondary-foreground: 10 10 10;
+    --color-muted: 245 245 245;
+    --color-muted-foreground: 115 115 115;
+    --color-accent: 77 208 225;
+    --color-accent-foreground: 250 250 250;
+    --color-destructive: 239 68 68;
+    --color-destructive-foreground: 250 250 250;
+    --color-border: 229 229 229;
+    --color-input: 229 229 229;
+    --color-ring: 99 102 241;
+  }
+
+  .dark {
+    --color-background: 10 10 10;
+    --color-foreground: 250 250 250;
+    --color-card: 26 26 26;
+    --color-card-foreground: 250 250 250;
+    --color-popover: 26 26 26;
+    --color-popover-foreground: 250 250 250;
+    --color-primary: 129 140 248;
+    --color-primary-foreground: 10 10 10;
+    --color-secondary: 100 181 246;
+    --color-secondary-foreground: 250 250 250;
+    --color-muted: 38 38 38;
+    --color-muted-foreground: 163 163 163;
+    --color-accent: 77 208 225;
+    --color-accent-foreground: 10 10 10;
+    --color-destructive: 220 38 38;
+    --color-destructive-foreground: 250 250 250;
+    --color-border: 64 64 64;
+    --color-input: 64 64 64;
+    --color-ring: 129 140 248;
+  }
+}
+
+@layer base {
+  * {
+    border-color: rgb(var(--color-border));
+  }
+  
+  body {
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .animate-bounce {
+    animation: bounce 1s infinite;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
