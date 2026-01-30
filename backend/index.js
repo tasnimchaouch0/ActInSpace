@@ -22,6 +22,10 @@ app.use('/api/alerts', alertsRoutes);
 const aiRoutes = require('./routes/ai');
 app.use('/api/ai', aiRoutes);
 
+// Payment routes
+const paymentRoutes = require('./routes/payment');
+app.use('/api/payment', paymentRoutes);
+
 app.get('/', (req, res) => {
   res.send('GreenSignal backend API running');
 });

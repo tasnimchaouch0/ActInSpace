@@ -1,27 +1,57 @@
-# Node
-node_modules/
-.env
 
-# Python
+# Node and build artifacts
+node_modules/
+dist/
+.next/
+.env
+*.log
+.cache/
+
+# Python artifacts
 __pycache__/
 *.pyc
-.env
-
-# React
-build/
-dist/
-
-# DB
+*.pyo
+*.pyd
 *.db
+*.sqlite3
 
-# Docker
-*.log
+# Jupyter and notebook checkpoints
+.ipynb_checkpoints/
 
-# Next.js
-.next/
+# VSCode and editor settings
+.vscode/
+*.code-workspace
 
-# Python venv
-.venv/
+# OS files
+.DS_Store
+Thumbs.db
 
-# Joblib dataset
-images_dataset.joblib
+# Model and large data files
+*.glb
+*.joblib
+*.h5
+*.pkl
+*.csv
+*.zip
+*.tar.gz
+*.tif
+*.tiff
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.gif
+
+# ReadyPlayerMe/Three.js specific
+ai_service/wolf3d-readyplayerme-threejs-boilerplate/node_modules/
+ai_service/wolf3d-readyplayerme-threejs-boilerplate/dist/
+ai_service/wolf3d-readyplayerme-threejs-boilerplate/.cache/
+ai_service/wolf3d-readyplayerme-threejs-boilerplate/src/assets/models/
+
+# Exclude secrets
+ai_service/.env
+backend/.env
+frontend/.env
+
+# Exclude geemap cache if used
+.geemap/

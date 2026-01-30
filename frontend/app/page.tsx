@@ -175,43 +175,26 @@ export default function LandingPage() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-              <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Features
-              </Link>
-              <Link href="#how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                How It Works
-              </Link>
-              <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
-              </Link>
-              <Link href="#contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Contact
-              </Link>
+              <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Features</Link>
+              <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Pricing</Link>
             </div>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons - Simplified for Client Check */}
             <div className="hidden md:flex items-center gap-3">
-              <Button variant="ghost" size="sm">
-                Log in
-              </Button>
-              <Link href="/dashboard">
-                <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                  Get Started
-                </Button>
+              <Link href="/login">
+                <Button variant="ghost" size="sm">Log in</Button>
+              </Link>
+              <Link href="/signup">
+                <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">Get Started</Button>
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - Same logic */}
             <button
               className="md:hidden p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? (
-                <XIcon className="w-6 h-6" />
-              ) : (
-                <MenuIcon className="w-6 h-6" />
-              )}
+              {mobileMenuOpen ? <XIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
             </button>
           </div>
 
@@ -219,28 +202,8 @@ export default function LandingPage() {
           {mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-border">
               <div className="flex flex-col gap-4">
-                <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground">
-                  Features
-                </Link>
-                <Link href="#how-it-works" className="text-sm text-muted-foreground hover:text-foreground">
-                  How It Works
-                </Link>
-                <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground">
-                  Pricing
-                </Link>
-                <Link href="#contact" className="text-sm text-muted-foreground hover:text-foreground">
-                  Contact
-                </Link>
-                <div className="flex gap-3 pt-4 border-t border-border">
-                  <Button variant="outline" size="sm" className="flex-1">
-                    Log in
-                  </Button>
-                  <Link href="/dashboard" className="flex-1">
-                    <Button size="sm" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                      Get Started
-                    </Button>
-                  </Link>
-                </div>
+                <Link href="/login" className="text-sm font-medium">Log In</Link>
+                <Link href="/signup" className="text-sm font-medium text-primary">Sign Up</Link>
               </div>
             </div>
           )}

@@ -55,7 +55,8 @@ export default function OliveMap({ fields, selectedFieldId, onFieldSelect }: Oli
             zoomControl: false, // We'll add custom control or rely on scroll/touch
             attributionControl: false,
             layers: [satelliteImagery], // Default
-            preferCanvas: true,
+            layers: [satelliteImagery], // Default
+            preferCanvas: false,
         });
 
         // Controls
