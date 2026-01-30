@@ -16,3 +16,12 @@ dist/
 
 # Docker
 *.log
+
+# Next.js
+.next/
+
+# Python venv
+.venv/
+
+# Joblib dataset
+images_dataset.joblib
