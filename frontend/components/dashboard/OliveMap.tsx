@@ -22,7 +22,7 @@ interface OliveMapProps {
     onFieldSelect: (id: string) => void;
 }
 
-export default function OliveMap({ fields, selectedFieldId, onFieldSelect, isScanning = false }: OliveMapProps) {
+export default function OliveMap({ fields = [], selectedFieldId, onFieldSelect, isScanning = false }: OliveMapProps) {
     const mapRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<L.Map | null>(null);
     const layersRef = useRef<L.LayerGroup[]>([]);
@@ -93,6 +93,9 @@ export default function OliveMap({ fields, selectedFieldId, onFieldSelect, isSca
     useEffect(() => {
         const map = mapInstanceRef.current;
         if (!map) return;
+
+        // Safety check for fields
+        if (!fields || !Array.isArray(fields)) return;
 
         // Clear existing layers
         layersRef.current.forEach(layer => layer.remove());

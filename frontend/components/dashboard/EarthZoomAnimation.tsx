@@ -20,11 +20,11 @@ export default function EarthZoomAnimation({ onComplete, targetLocation }: Earth
     useEffect(() => {
         const stages = [
             { delay: 0, text: 'INITIALIZING ORBITAL SYSTEMS...' },
-            { delay: 800, text: 'CONNECTING TO SENTINEL NETWORK...' },
-            { delay: 1600, text: 'ACQUIRING SATELLITE IMAGERY...' },
-            { delay: 2400, text: 'LOCATING OLIVE FIELDS...' },
-            { delay: 3200, text: `TARGETING: ${targetLocation?.region || 'SFAX REGION'}` },
-            { delay: 4000, text: 'ESTABLISHING DATA STREAM...' },
+            { delay: 1600, text: 'CONNECTING TO SENTINEL NETWORK...' },
+            { delay: 3200, text: 'ACQUIRING SATELLITE IMAGERY...' },
+            { delay: 4800, text: 'LOCATING OLIVE FIELDS...' },
+            { delay: 6400, text: `TARGETING: ${targetLocation?.region || 'SFAX REGION'}` },
+            { delay: 8000, text: 'ESTABLISHING DATA STREAM...' },
         ];
 
         stages.forEach(({ delay, text }) => {
@@ -34,133 +34,92 @@ export default function EarthZoomAnimation({ onComplete, targetLocation }: Earth
             }, delay);
         });
 
-        // Complete animation after 5 seconds
+        // Complete animation after 10 seconds
         const timer = setTimeout(() => {
             onComplete();
-        }, 5000);
+        }, 10000);
 
         return () => clearTimeout(timer);
     }, [onComplete, targetLocation]);
 
+
     return (
-        <div className="fixed inset-0 z-[100] bg-space-950 overflow-hidden">
+        <div className="fixed inset-0 z-[100] bg-black overflow-hidden">
             {/* Star field background */}
-            <div className="absolute inset-0">
-                {Array.from({ length: 100 }).map((_, i) => (
+            <div className="absolute inset-0 pointer-events-none select-none">
+                {Array.from({ length: 120 }).map((_, i) => (
                     <div
                         key={i}
                         className="absolute rounded-full bg-white"
                         style={{
-                            width: `${Math.random() * 2 + 1}px`,
-                            height: `${Math.random() * 2 + 1}px`,
+                            width: `${Math.random() * 1.5 + 0.5}px`,
+                            height: `${Math.random() * 1.5 + 0.5}px`,
                             left: `${Math.random() * 100}%`,
                             top: `${Math.random() * 100}%`,
-                            opacity: Math.random() * 0.8 + 0.2,
-                            animation: `twinkle ${2 + Math.random() * 3}s ease-in-out infinite`,
+                            opacity: Math.random() * 0.7 + 0.1,
+                            filter: 'blur(0.5px)',
+                            animation: `twinkle ${2 + Math.random() * 4}s ease-in-out infinite`,
                             animationDelay: `${Math.random() * 2}s`,
                         }}
                     />
                 ))}
             </div>
 
-            {/* Central Earth and zoom effect */}
+            {/* Cinematic Earth zoom */}
             <div className="absolute inset-0 flex items-center justify-center">
-                {/* Outer orbital rings */}
-                <div className="absolute" style={{ animation: 'orbit 30s linear infinite' }}>
-                    <div className="w-[600px] h-[600px] border border-cyber-500/20 rounded-full" />
-                </div>
-                <div className="absolute" style={{ animation: 'orbit 25s linear infinite reverse' }}>
-                    <div className="w-[500px] h-[500px] border border-leaf-500/20 rounded-full" />
-                </div>
-                <div className="absolute" style={{ animation: 'orbit 20s linear infinite' }}>
-                    <div className="w-[400px] h-[400px] border border-cyber-500/10 rounded-full" />
-                </div>
-
-                {/* Earth container with zoom animation */}
                 <div
-                    className="relative transition-all duration-1000 ease-out"
+                    className="relative"
                     style={{
-                        transform: `scale(${1 + stage * 0.5})`,
+                        width: '420px',
+                        height: '420px',
+                        transform: `scale(${1 + stage * 0.22}) rotateX(18deg)`,
                         opacity: stage > 4 ? 0 : 1,
+                        transition: 'transform 1.2s cubic-bezier(0.4,0,0.2,1), opacity 1s',
+                        filter: 'drop-shadow(0 0 80px #0ea5e9aa) drop-shadow(0 0 120px #22c55e55)'
                     }}
                 >
-                    {/* Earth glow */}
+                    {/* Earth sphere with realistic shading */}
                     <div
-                        className="absolute -inset-8 rounded-full blur-xl"
+                        className="absolute w-full h-full rounded-full overflow-hidden"
                         style={{
-                            background: 'radial-gradient(circle, rgba(14, 165, 233, 0.3) 0%, rgba(34, 197, 94, 0.1) 50%, transparent 70%)',
-                        }}
-                    />
-
-                    {/* Earth sphere */}
-                    <div
-                        className="relative w-64 h-64 rounded-full overflow-hidden"
-                        style={{
-                            background: `
-                                radial-gradient(circle at 30% 30%, 
-                                    rgba(59, 130, 246, 0.8) 0%, 
-                                    rgba(34, 197, 94, 0.6) 25%,
-                                    rgba(61, 79, 47, 0.8) 50%, 
-                                    rgba(15, 23, 42, 1) 100%
-                                )
-                            `,
-                            boxShadow: `
-                                inset -20px -20px 60px rgba(0, 0, 0, 0.8),
-                                inset 10px 10px 40px rgba(156, 175, 136, 0.2),
-                                0 0 60px rgba(14, 165, 233, 0.4),
-                                0 0 120px rgba(34, 197, 94, 0.2)
-                            `,
-                            animation: 'earth-rotate 20s linear infinite',
+                            background: `radial-gradient(circle at 60% 35%, #b3e0ff 0%, #3b82f6 30%, #1e293b 70%, #111827 100%)`,
+                            boxShadow: 'inset 0 0 80px #000a, 0 0 120px #0ea5e9aa',
+                            border: '2px solid #0ea5e9',
+                            zIndex: 2,
                         }}
                     >
-                        {/* Atmosphere layer */}
+                        {/* Subtle cloud layer */}
                         <div
-                            className="absolute inset-0 rounded-full"
+                            className="absolute w-full h-full rounded-full"
                             style={{
-                                background: 'radial-gradient(circle at 30% 30%, transparent 40%, rgba(14, 165, 233, 0.1) 60%, rgba(14, 165, 233, 0.2) 100%)',
+                                background: 'radial-gradient(circle at 50% 40%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 60%, transparent 100%)',
+                                filter: 'blur(2.5px)',
+                                zIndex: 3,
                             }}
                         />
-
-                        {/* Continental shapes (simplified) */}
+                        {/* Subtle highlight */}
+                        <div
+                            className="absolute w-2/3 h-1/3 left-1/4 top-1/8 rounded-full"
+                            style={{
+                                background: 'radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 80%)',
+                                filter: 'blur(8px)',
+                                zIndex: 4,
+                            }}
+                        />
+                        {/* Location marker (fades in late) */}
                         <div
                             className="absolute"
                             style={{
-                                top: '35%',
-                                left: '45%',
-                                width: '40px',
-                                height: '50px',
-                                background: 'rgba(107, 127, 90, 0.6)',
-                                borderRadius: '40% 60% 50% 40%',
-                                transform: 'rotate(-10deg)',
-                                boxShadow: '0 0 10px rgba(107, 127, 90, 0.3)',
-                            }}
-                        />
-                        <div
-                            className="absolute"
-                            style={{
-                                top: '25%',
-                                left: '50%',
-                                width: '60px',
-                                height: '40px',
-                                background: 'rgba(107, 127, 90, 0.5)',
-                                borderRadius: '50% 40% 60% 50%',
-                                transform: 'rotate(5deg)',
-                            }}
-                        />
-
-                        {/* Tunisia/Sfax location marker */}
-                        <div
-                            className="absolute"
-                            style={{
-                                top: '38%',
-                                left: '52%',
+                                top: '54%',
+                                left: '62%',
                                 transform: 'translate(-50%, -50%)',
+                                opacity: stage > 3 ? 1 : 0,
+                                transition: 'opacity 1s',
+                                zIndex: 10,
                             }}
                         >
-                            {/* Pulse rings */}
-                            <div className="absolute -inset-4 rounded-full border-2 border-neon-400/60 animate-ping" />
-                            <div className="absolute -inset-2 rounded-full border border-neon-400/40 animate-pulse" />
-                            {/* Core marker */}
+                            <div className="absolute -inset-4 rounded-full border-2 border-cyan-400/60 animate-ping" />
+                            <div className="absolute -inset-2 rounded-full border border-cyan-400/40 animate-pulse" />
                             <div
                                 className="relative w-4 h-4 rounded-full"
                                 style={{
@@ -170,22 +129,14 @@ export default function EarthZoomAnimation({ onComplete, targetLocation }: Earth
                             />
                         </div>
                     </div>
-
-                    {/* Satellite orbiting */}
+                    {/* Earth glow */}
                     <div
-                        className="absolute w-full h-full"
-                        style={{ animation: 'orbit 8s linear infinite' }}
-                    >
-                        <div
-                            className="absolute -top-2 left-1/2 transform -translate-x-1/2"
-                            style={{
-                                fontSize: '16px',
-                                textShadow: '0 0 10px rgba(14, 165, 233, 0.8)',
-                            }}
-                        >
-                            🛰️
-                        </div>
-                    </div>
+                        className="absolute -inset-8 rounded-full blur-2xl"
+                        style={{
+                            background: 'radial-gradient(circle, #0ea5e9 0%, #22c55e 60%, transparent 100%)',
+                            zIndex: 1,
+                        }}
+                    />
                 </div>
             </div>
 

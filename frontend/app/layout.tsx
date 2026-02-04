@@ -44,7 +44,9 @@ export default function RootLayout({
                 />
             </head>
             <body className="min-h-screen font-sans antialiased">
-                {children}
+                <AuthProvider>
+                    {children}
+                </AuthProvider>
             </body>
         </html>
     );

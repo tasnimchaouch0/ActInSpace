@@ -3,11 +3,13 @@
 import { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { Zap } from 'lucide-react';
 import TimelineSlider from '@/components/dashboard/TimelineSlider';
 import FieldFingerprintCard from '@/components/dashboard/FieldFingerprintCard';
+import DemoNavigation from '@/components/dashboard/DemoNavigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 
-// Dynamically import OliveMap to avoid SSR issues with Leaflet
+// Dynamically import components to avoid SSR issues
 const OliveMap = dynamic(() => import('@/components/dashboard/OliveMap'), {
     ssr: false,
     loading: () => (
@@ -16,6 +18,14 @@ const OliveMap = dynamic(() => import('@/components/dashboard/OliveMap'), {
             <div className="text-emerald-500/50 font-mono text-xs tracking-widest animate-pulse uppercase">Establishing Satellite Uplink...</div>
         </div>
     ),
+});
+
+const MongiChat = dynamic(() => import('@/components/dashboard/MongiChat'), {
+    ssr: false,
+});
+
+const MongiCharacter = dynamic(() => import('@/components/3d/MongiCharacter'), {
+    ssr: false,
 });
 
 interface Field {
@@ -53,7 +63,7 @@ interface SatelliteData {
 }
 
 export default function DashboardPage() {
-    const { token, isAuthenticated } = useAuth();
+    const { user, token, isAuthenticated } = useAuth();
     const [fields, setFields] = useState<Field[]>([]);
     const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
     const [currentDate, setCurrentDate] = useState<string>('');
@@ -61,6 +71,7 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(false);
     const [isScanning, setIsScanning] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isMongiSpeaking, setIsMongiSpeaking] = useState(false);
 
     // Fetch fields from backend
     const hasFetchedRef = useRef(false);
@@ -191,9 +202,12 @@ export default function DashboardPage() {
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
-                        <Link href="/payment" className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent hover:bg-accent/80 transition-colors">
-                            <span className="text-primary text-sm font-semibold">⚡ Upgrade to Pro</span>
-                        </Link>
+                        {user?.role !== 'premium' && (
+                            <Link href="/payment" className="hidden md:flex items-center gap-3 px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 transition-all group">
+                                <Zap className="w-4 h-4 text-emerald-500 fill-emerald-500/20 group-hover:scale-110 transition-transform" />
+                                <span className="text-emerald-500 text-[10px] font-black uppercase tracking-widest">Upgrade Uplink</span>
+                            </Link>
+                        )}
 
                         <div className="h-6 w-px bg-border mx-2" />
 
@@ -224,6 +238,49 @@ export default function DashboardPage() {
 
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-6 py-6">
+                {/* Demo Navigation */}
+                <DemoNavigation />
+
+                {/* Mongi Character Section */}
+                <div className="mb-8 bg-gradient-to-br from-emerald-500/5 via-cyan-500/5 to-blue-500/5 border border-emerald-500/20 rounded-[3rem] p-8">
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 className="text-2xl font-black text-foreground uppercase tracking-tight italic">Digital Consultant</h2>
+                            <p className="text-xs text-muted-foreground font-mono tracking-widest uppercase mt-1">AI-Powered Agronomy Advisor</p>
+                        </div>
+                        <button
+                            onClick={() => setIsMongiSpeaking(!isMongiSpeaking)}
+                            className={`px-8 py-3 rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] transition-all duration-300 shadow-lg ${isMongiSpeaking
+                                ? 'bg-rose-500 hover:bg-rose-600 text-white shadow-rose-200'
+                                : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-200'
+                                }`}
+                        >
+                            {isMongiSpeaking ? '🔇 Stop Audio' : '🎤 Audio On'}
+                        </button>
+                    </div>
+
+                    <div className="grid lg:grid-cols-2 gap-8 h-[500px]">
+                        {/* 3D Visualizer */}
+                        <div className="relative h-full bg-[#050505] rounded-[2.5rem] border border-white/5 overflow-hidden group shadow-inner">
+                            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none z-20" />
+                            <div className="absolute top-4 left-4 z-30 flex gap-2">
+                                <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[8px] font-black text-emerald-500 uppercase tracking-widest">
+                                    3D Uplink Active
+                                </div>
+                            </div>
+                            <MongiCharacter isSpeaking={isMongiSpeaking} />
+                        </div>
+
+                        {/* Integrated Chat Interface */}
+                        <div className="h-full rounded-[2.5rem] overflow-hidden border border-slate-200 shadow-xl bg-white/50 backdrop-blur-sm">
+                            <MongiChat
+                                onSpeakingChange={setIsMongiSpeaking}
+                                isInline={true}
+                            />
+                        </div>
+                    </div>
+                </div>
+
                 {/* Map Section */}
                 {/* Layout Flow: Features then Map */}
                 <div className="flex flex-col gap-8">

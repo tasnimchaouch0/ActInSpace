@@ -6,7 +6,10 @@ dist/
 .env
 *.log
 .cache/
-
+frontend/package-lock.json
+frontend/package.json
+frontend/public/model.glb
+.venv_64/
 # Python artifacts
 __pycache__/
 *.pyc
